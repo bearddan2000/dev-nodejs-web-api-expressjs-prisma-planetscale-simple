@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  planetscale:
+    image: cloudmix/planetscale-local:latest
+    container_name: planetscale_local
+    hostname: planetscale-local
+    ports:
+      - 3000:8080
+    environment:
+      - MYSQL_URL=mysql://planetscale:planetscale@mysql:3306/planetscale
+    volumes:
+      - ./planetscale/sql:/docker-entrypoint-initdb.d
+  
+  db:
+    image: mysql:8.0.32
+    container_name: mysql
+    hostname: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=planetscale
+      - MYSQL_DATABASE=planetscale
+      - MYSQL_USER=planetscale
+      - MYSQL_PASSWORD=planetscale
+
+  #node-srv:
+  #  build: node-srv
+  #  command: /bin/sh -c "/wait && npx prisma db push && npx ts-node app.ts"
+  #  environment:
+  #    - WAIT_HOSTS=db:3306, planetscale:8080
+  #    - WAIT_HOSTS_TIMEOUT=300
+  #    - WAIT_SLEEP_INTERVAL=30
+  #    - WAIT_HOST_CONNECT_TIMEOUT=30
+  #  ports:
+  #    - "80:3000"
+#
